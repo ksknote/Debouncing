@@ -1,8 +1,9 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import CodeBlock from "./components/CodeBlock";
+import CodeBlock from "./components/CodeBlockContainer";
 import styled from "styled-components";
+import DebouncingContainer from "./components/DebouncingContainer";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <p>by Seongkyoung Kwon</p>
       </Header>
       <Body>
+        <DebouncingContainer />
         <CodeBlock />
       </Body>
     </Wrapper>
@@ -36,7 +38,7 @@ const Header = styled.header`
   }
 `;
 
-const Body = styled.body`
+const Body = styled.div`
   display: flex;
   > div {
     flex: 1;

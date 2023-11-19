@@ -1,25 +1,24 @@
 import { CopyBlock, dracula } from "react-code-blocks";
 import styled from "styled-components";
 
-function CodeBlock() {
+function CodeBlockContainer() {
   const codeText = `
   `;
   return (
-    <CodeBlockContainer>
+    <CodeBlockWrapper>
       <CopyBlock
         language="tsx"
         text={codeText}
         showLineNumbers={true}
         theme={dracula}
-        codeBlock
       />
-    </CodeBlockContainer>
+    </CodeBlockWrapper>
   );
 }
 
-export default CodeBlock;
+export default CodeBlockContainer;
 
-const CodeBlockContainer = styled.div`
+const CodeBlockWrapper = styled.div`
   width: 100%;
   max-width: 700px;
   font-family: "Fira Code", monospace;
