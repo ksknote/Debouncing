@@ -5,14 +5,13 @@ import RedButton from "../assets/red_button.png";
 import LigthBurbOn from "../assets/lightburb_on.png";
 import LightBurbOff from "../assets/lightburb_off.png";
 import useDebounce from "../utils/useDebounce";
-import Description from "./Description";
-import { useRecoilState } from "recoil";
-import debounceLogState from "./../atom";
+import { useSetRecoilState } from "recoil";
+import debounceLogState from "../atom";
 
 function DebouncingContainer() {
   const [delay, setDelay] = useState(0);
   const [isLightBurbTurnedOn, setIsLightBurbTurnedOn] = useState(false);
-  const [logMessages, setLogMessages] = useRecoilState(debounceLogState);
+  const logHandler = useSetRecoilState(debounceLogState);
 
   const turnOnBulb = () => {
     setIsLightBurbTurnedOn(true);
@@ -43,7 +42,7 @@ function DebouncingContainer() {
   };
 
   const setLogMessage = (newLog: string) => {
-    setLogMessages((prev) => [newLog, ...prev]);
+    logHandler((prev) => [newLog, ...prev]);
   };
 
   const handleClickPlusDelayButton = () => {
@@ -56,8 +55,7 @@ function DebouncingContainer() {
   };
 
   return (
-    <div>
-      <Description />
+    <>
       <div>
         <h3>설정</h3>
         <div>
@@ -89,15 +87,7 @@ function DebouncingContainer() {
           </CancelButton>
         </div>
       </div>
-      <div>
-        <h3>로그</h3>
-        <LogMessages>
-          {logMessages.map((message, index) => (
-            <div key={`log${index}`}>{message}</div>
-          ))}
-        </LogMessages>
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -126,14 +116,4 @@ const LightBurbImg = styled.img`
 
 const CancelButton = styled.button`
   /* width: 50px; */
-`;
-
-const LogMessages = styled.div`
-  display: flex;
-  flex-direction: column-reverse;
-  height: 200px;
-  padding-left: 15px;
-  border-radius: 10px;
-  background-color: gray;
-  overflow-y: auto;
 `;

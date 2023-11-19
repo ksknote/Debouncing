@@ -1,14 +1,10 @@
 import "./App.css";
-import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-} from "recoil";
+import { RecoilRoot } from "recoil";
 import CodeBlock from "./components/CodeBlockContainer";
 import styled from "styled-components";
 import DebouncingContainer from "./components/DebouncingContainer";
+import DescriptionContainer from "./components/DescriptionContainer";
+import LogContainer from "./components/LogContainer";
 
 function App() {
   return (
@@ -20,7 +16,11 @@ function App() {
         </Header>
         <Body>
           <CodeBlock />
-          <DebouncingContainer />
+          <div>
+            <DescriptionContainer />
+            <DebouncingContainer />
+            <LogContainer />
+          </div>
         </Body>
       </Wrapper>
     </RecoilRoot>
@@ -30,6 +30,8 @@ function App() {
 export default App;
 
 const Wrapper = styled.div`
+  height: 100%;
+  min-height: 100vh;
   padding: 30px;
   background-color: black;
   color: white;
@@ -40,6 +42,7 @@ const Header = styled.header`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-bottom: 20px;
   h1 {
     margin: 5px;
   }

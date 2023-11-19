@@ -2,7 +2,7 @@ import styled from "styled-components";
 import GreenButton from "../assets/green_button.png";
 import RedButton from "../assets/red_button.png";
 
-function Description() {
+function DescriptionContainer() {
   return (
     <>
       <h3>동작 설명</h3>
@@ -30,7 +30,7 @@ function Description() {
   );
 }
 
-export default Description;
+export default DescriptionContainer;
 
 const ButtonDescriptionContainer = styled.div`
   display: flex;

@@ -3,11 +3,8 @@ import styled from "styled-components";
 
 function CodeBlockContainer() {
   const codeText = `
-  export default function debounce(
-    func: Function,
-    wait: number,
-    immediate?: boolean
-  ) {
+  function useDebounce(func: Function, wait: number, immediate?: boolean) {
+  
     const debounced = (...args: any[]) => {
       //즉시 실행 옵션 true 일 경우 타이머 취소하고 즉시 실행하여 retrun
       if (immediate) {
@@ -21,21 +18,18 @@ function CodeBlockContainer() {
       }
   
       // 새로운 타이머 설정 delay밀리초 후에 func함수 호출
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         timer = setTimeout(() => {
-          resolve(func(...args));
+          try {
+            const result = func(...args);
+            resolve(result);
+          } catch (err) {
+            reject(err);
+          }
         }, wait);
       });
     };
   
-    // 타이머 취소
-    const cancel = () => {
-      if (!timer) return;
-      clearTimeout(timer);
-      timer = null;
-    };
-    return { debounced, cancel };
-  }
   `;
   return (
     <CodeBlockWrapper>
