@@ -3,11 +3,16 @@ import debounceLogState from "../atom";
 
 let timer: NodeJS.Timeout | null = null; //지연 호출을 관리할 타이머 선언
 
-function useDebounce(func: Function, wait: number, immediate?: boolean) {
-  const logHandler = useSetRecoilState(debounceLogState); // 값만 변경 시키기
+function useDebounce(
+  func: Function,
+  wait: number = 0,
+  immediate: boolean = false
+) {
+  // 훅 진행 상황 관찰을 위한 로그 기록 핸들러입니다. (과제용 기능)
+  const logHandler = useSetRecoilState(debounceLogState);
 
   const setLogMessage = (newLog: string) => {
-    logHandler((prev) => [...prev, newLog]);
+    logHandler((prev) => [newLog, ...prev]);
   };
 
   const debounced = (...args: any[]) => {
@@ -16,7 +21,14 @@ function useDebounce(func: Function, wait: number, immediate?: boolean) {
       setLogMessage("즉시 실행 옵션 선택");
       cancel();
       setLogMessage("즉시 실행");
-      return Promise.resolve(func(...args));
+      return new Promise((resolve, reject) => {
+        try {
+          const result = func(...args);
+          resolve(result);
+        } catch (err) {
+          reject(err);
+        }
+      });
     }
 
     // 타이머가 있는 상태에서 새로운 함수 호출이 들어올 때마다 타이머 리셋
@@ -41,7 +53,10 @@ function useDebounce(func: Function, wait: number, immediate?: boolean) {
 
   // 타이머 취소
   const cancel = () => {
-    if (!timer) return;
+    if (!timer) {
+      setLogMessage("타이머가 없습니다.");
+      return;
+    }
     clearTimeout(timer);
     timer = null;
     setLogMessage("타이머 취소 완료");
