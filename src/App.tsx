@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import CodeBlock from "./components/CodeBlock";
 import styled from "styled-components";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
         <p>by Seongkyoung Kwon</p>
       </Header>
       <Body>
+        <CodeBlock />
       </Body>
     </Wrapper>
   );
