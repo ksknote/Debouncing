@@ -53,7 +53,7 @@ const Body = styled.div`
     flex: 1;
     padding: 10px;
   }
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     flex-direction: row;
   }
 `;
