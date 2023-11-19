@@ -4,9 +4,9 @@ import RedButton from "../assets/red_button.png";
 
 function DescriptionContainer() {
   return (
-    <>
+    <div>
       <h3>동작 설명</h3>
-      <div>
+      <Descriptions>
         <ButtonDescriptionContainer>
           <img src={GreenButton} alt="초록색 버튼" />
           <p>
@@ -22,15 +22,28 @@ function DescriptionContainer() {
           <p>
             <b>immediate 버튼</b>
             <br />
-            빨간 스위치를 클릭하면 바로 불이 들어옵니다.
+            빨간 스위치를 클릭하면 바로 불이 켜집니다.
           </p>
         </ButtonDescriptionContainer>
-      </div>
-    </>
+        <ButtonDescriptionContainer>
+          <CancelButton>취소</CancelButton>
+          <p>
+            <b>취소 버튼</b>
+            <br />
+            버튼 클릭이 무효화됩니다.
+          </p>
+        </ButtonDescriptionContainer>
+      </Descriptions>
+    </div>
   );
 }
 
 export default DescriptionContainer;
+const Descriptions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
 
 const ButtonDescriptionContainer = styled.div`
   display: flex;
@@ -40,4 +53,19 @@ const ButtonDescriptionContainer = styled.div`
     width: 40px;
     height: 40px;
   }
+  p {
+    margin: 0;
+  }
+`;
+
+const CancelButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+  background-color: #efefef;
+  color: black;
+  font-size: 12px;
 `;
