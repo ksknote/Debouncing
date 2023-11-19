@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import GreenButton from "../assets/green_button.png";
 import RedButton from "../assets/red_button.png";
@@ -10,7 +10,6 @@ import { useRecoilState } from "recoil";
 import debounceLogState from "./../atom";
 
 function DebouncingContainer() {
-  const [delayInputValue, setDelayInputValue] = useState(0);
   const [delay, setDelay] = useState(0);
   const [isLightBurbTurnedOn, setIsLightBurbTurnedOn] = useState(false);
   const [logMessages, setLogMessages] = useRecoilState(debounceLogState);
@@ -25,52 +24,51 @@ function DebouncingContainer() {
   const turnObBurbAfterDelay = useDebounce(turnOnBulb, delay, false);
   const turnObBurbImmediately = useDebounce(turnOnBulb, delay, true);
 
-  const handleClickSetDelay = () => {
-    setDelay(delayInputValue);
-    setDelayInputValue(0);
-    setLogMessage(`delay가 ${delayInputValue}로 설정되었습니다.`);
-  };
-
   const handleClickGreenButton = () => {
-    turnObBurbAfterDelay.debounced().then((res) => setLogMessage(`반짝`));
+    turnObBurbAfterDelay
+      .debounced()
+      .then((res) => setLogMessage(`반짝`))
+      .catch((error) => setLogMessage(error));
   };
 
   const handleClickRedButton = () => {
-    turnObBurbImmediately.debounced().then((res) => setLogMessage(`반짝`));
+    turnObBurbImmediately
+      .debounced()
+      .then((res) => setLogMessage(`반짝`))
+      .catch((error) => setLogMessage(error));
   };
 
-  const handleClickResetButton = () => {
+  const handleClickCancelButton = () => {
     turnObBurbAfterDelay.cancel();
   };
 
   const setLogMessage = (newLog: string) => {
-    setLogMessages((prev) => [...prev, newLog]);
+    setLogMessages((prev) => [newLog, ...prev]);
+  };
+
+  const handleClickPlusDelayButton = () => {
+    setDelay((prev) => prev + 1000);
+  };
+  const handleClickMinusDelayButton = () => {
+    if (delay >= 1000) {
+      setDelay((prev) => prev - 1000);
+    }
   };
 
   return (
     <div>
       <Description />
-      <TimerSettingContainer>
+      <div>
         <h3>설정</h3>
-        <label htmlFor="timer">delay</label>
-        <input
-          id="timer"
-          type="number"
-          value={delayInputValue}
-          onChange={(e) => setDelayInputValue(parseInt(e.target.value))}
-        />
-        <button onClick={handleClickSetDelay}>설정</button>
-      </TimerSettingContainer>
+        <div>
+          <button onClick={handleClickMinusDelayButton}>-</button>
+          <DelayText>{delay / 1000}</DelayText>
+          <button onClick={handleClickPlusDelayButton}>+</button> 초 후에 불
+          켜기
+        </div>
+      </div>
       <div>
         <h3>실행</h3>
-        <div>
-          <p>Delay: {delay}</p>
-        </div>
-        <LogContainer>
-          {logMessages.map((message, index) => (
-            <div key={index}>{message}</div>
-          ))}
-        </LogContainer>
         <div>
           <PushButton
             src={GreenButton}
@@ -82,12 +80,22 @@ function DebouncingContainer() {
             alt="빨간색 버튼"
             onClick={handleClickRedButton}
           />
+          <LightBurbImg
+            src={isLightBurbTurnedOn ? LigthBurbOn : LightBurbOff}
+            alt="전구 아이콘"
+          />
+          <CancelButton onClick={handleClickCancelButton}>
+            타이머 취소
+          </CancelButton>
         </div>
-        <LightBurbImg
-          src={isLightBurbTurnedOn ? LigthBurbOn : LightBurbOff}
-          alt="전구 아이콘"
-        />
-        <Button onClick={handleClickResetButton}>리셋</Button>
+      </div>
+      <div>
+        <h3>로그</h3>
+        <LogMessages>
+          {logMessages.map((message, index) => (
+            <div key={`log${index}`}>{message}</div>
+          ))}
+        </LogMessages>
       </div>
     </div>
   );
@@ -95,7 +103,9 @@ function DebouncingContainer() {
 
 export default DebouncingContainer;
 
-const TimerSettingContainer = styled.div``;
+const DelayText = styled.span`
+  padding: 10px;
+`;
 
 const PushButton = styled.img`
   width: 90px;
@@ -114,12 +124,16 @@ const LightBurbImg = styled.img`
   width: 80px;
 `;
 
-const Button = styled.button``;
+const CancelButton = styled.button`
+  /* width: 50px; */
+`;
 
-const LogContainer = styled.div`
+const LogMessages = styled.div`
   display: flex;
-  flex-direction: column;
-  height: 100px;
+  flex-direction: column-reverse;
+  height: 200px;
+  padding-left: 15px;
+  border-radius: 10px;
   background-color: gray;
   overflow-y: auto;
 `;
