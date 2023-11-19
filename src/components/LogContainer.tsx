@@ -5,14 +5,14 @@ import debounceLogState from "./../atom";
 function LogContainer() {
   const logMessages = useRecoilValue(debounceLogState); // 읽기 전용!
   return (
-    <>
+    <div>
       <h3>로그</h3>
       <LogMessages>
         {logMessages.map((message, index) => (
           <div key={`log${index}`}>{message}</div>
         ))}
       </LogMessages>
-    </>
+    </div>
   );
 }
 

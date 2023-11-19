@@ -16,11 +16,11 @@ function App() {
         </Header>
         <Body>
           <CodeBlock />
-          <div>
+          <Contents>
             <DescriptionContainer />
             <DebouncingContainer />
             <LogContainer />
-          </div>
+          </Contents>
         </Body>
       </Wrapper>
     </RecoilRoot>
@@ -52,6 +52,9 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+
   > div {
     flex: 1;
     padding: 10px;
@@ -59,4 +62,10 @@ const Body = styled.div`
   @media (min-width: 1024px) {
     flex-direction: row;
   }
+`;
+
+const Contents = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;

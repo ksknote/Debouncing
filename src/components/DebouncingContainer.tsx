@@ -59,51 +59,66 @@ function DebouncingContainer() {
       <div>
         <h3>설정</h3>
         <div>
-          <button onClick={handleClickMinusDelayButton}>-</button>
+          <DelaySettingButton onClick={handleClickMinusDelayButton}>
+            -
+          </DelaySettingButton>
           <DelayText>{delay / 1000}</DelayText>
-          <button onClick={handleClickPlusDelayButton}>+</button> 초 후에 불
-          켜기
+          <DelaySettingButton onClick={handleClickPlusDelayButton}>
+            +
+          </DelaySettingButton>{" "}
+          초 후에 불 켜기
         </div>
       </div>
       <div>
         <h3>실행</h3>
-        <div>
-          <PushButton
-            src={GreenButton}
-            alt="초록색 버튼"
-            onClick={handleClickGreenButton}
-          />
-          <PushButton
-            src={RedButton}
-            alt="빨간색 버튼"
-            onClick={handleClickRedButton}
-          />
+        <ExecutionContainer>
+          <ControlButtons>
+            <PushButton
+              src={GreenButton}
+              alt="초록색 버튼"
+              onClick={handleClickGreenButton}
+            />
+            <PushButton
+              src={RedButton}
+              alt="빨간색 버튼"
+              onClick={handleClickRedButton}
+            />
+            <CancelButton onClick={handleClickCancelButton}>취소</CancelButton>
+          </ControlButtons>
+          <Line />
           <LightBurbImg
             src={isLightBurbTurnedOn ? LigthBurbOn : LightBurbOff}
             alt="전구 아이콘"
           />
-          <CancelButton onClick={handleClickCancelButton}>
-            타이머 취소
-          </CancelButton>
-        </div>
+        </ExecutionContainer>
       </div>
     </>
   );
 }
 
 export default DebouncingContainer;
+const DelaySettingButton = styled.button`
+  cursor: pointer;
+`;
 
 const DelayText = styled.span`
   padding: 10px;
 `;
+const ExecutionContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
+const ControlButtons = styled.div`
+  display: flex;
+  align-items: center;
+`;
 const PushButton = styled.img`
   width: 90px;
   height: 90px;
   -webkit-transition: transform 0.1s ease-in-out;
   transition: transform 0.1s ease-in-out;
   cursor: pointer;
-
   &:active {
     -webkit-transform: scale(0.8);
     transform: scale(0.8);
@@ -114,6 +129,18 @@ const LightBurbImg = styled.img`
   width: 80px;
 `;
 
+const Line = styled.div`
+  width: 100%;
+
+  margin: 0 10px;
+
+  border: none;
+  border-top: 4px dotted white;
+`;
+
 const CancelButton = styled.button`
-  /* width: 50px; */
+  width: 50px;
+  height: 50px;
+  margin-left: 10px;
+  cursor: pointer;
 `;
