@@ -1,9 +1,10 @@
+import { useState } from "react";
 import styled from "styled-components";
 import GreenButton from "../assets/green_button.png";
 import RedButton from "../assets/red_button.png";
 import LigthBurbOn from "../assets/lightburb_on.png";
 import LightBurbOff from "../assets/lightburb_off.png";
-import { useState } from "react";
+import debounce from "../utils/debounce";
 
 function DebouncingContainer() {
   const [delayInputValue, setDelayInputValue] = useState(0);
@@ -20,9 +21,20 @@ function DebouncingContainer() {
   const handleClickSetDelay = () => {
     setDelay(delayInputValue);
     setDelayInputValue(0);
-    alert(`delay가 {delay}로 설정되었습니다.`);
+    alert(`delay가 ${delay}로 설정되었습니다.`);
   };
 
+  const handleClickGreenButton = () => {
+    debounce(turnOnBulb, delay, false)
+      .debounced()
+      .then((res) => console.log(res));
+  };
+
+  const handleClickRedButton = () => {
+    debounce(turnOnBulb, delay, true)
+      .debounced()
+      .then((res) => console.log(res));
+  };
 
   return (
     <div>
@@ -63,13 +75,18 @@ function DebouncingContainer() {
           <PushButton
             src={GreenButton}
             alt="초록색 버튼"
+            onClick={handleClickGreenButton}
           />
           <PushButton
             src={RedButton}
             alt="빨간색 버튼"
+            onClick={handleClickRedButton}
           />
         </div>
-        {/* <LightBurbImg src={LigthBurbOn} alt="전구 아이콘" isLightBurbTurnedOn /> */}
+        <LightBurbImg
+          src={isLightBurbTurnedOn ? LigthBurbOn : LightBurbOff}
+          alt="전구 아이콘"
+        />
         <Button>리셋</Button>
       </div>
     </div>
@@ -95,6 +112,7 @@ const PushButton = styled.img`
   height: 90px;
   -webkit-transition: transform 0.1s ease-in-out;
   transition: transform 0.1s ease-in-out;
+  cursor: pointer;
 
   &:active {
     -webkit-transform: scale(0.8);
@@ -102,10 +120,8 @@ const PushButton = styled.img`
   }
 `;
 
-// const LightBurbImg = styled.img<{ isLightBurbTurnedOn: boolean }>`
-// width: 80px;
-//   filter: ${({ isLightBurbTurnedOn }) =>
-//     isLightBurbTurnedOn && "brightness(50%)"};
-// `;
+const LightBurbImg = styled.img`
+  width: 80px;
+`;
 
 const Button = styled.button``;
