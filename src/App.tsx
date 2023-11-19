@@ -1,22 +1,29 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
 import CodeBlock from "./components/CodeBlockContainer";
 import styled from "styled-components";
 import DebouncingContainer from "./components/DebouncingContainer";
 
 function App() {
   return (
-    <Wrapper>
-      <Header>
-        <h1>디바운싱</h1>
-        <p>by Seongkyoung Kwon</p>
-      </Header>
-      <Body>
-        <DebouncingContainer />
-        <CodeBlock />
-      </Body>
-    </Wrapper>
+    <RecoilRoot>
+      <Wrapper>
+        <Header>
+          <h1>디바운싱</h1>
+          <p>by Seongkyoung Kwon</p>
+        </Header>
+        <Body>
+          <CodeBlock />
+          <DebouncingContainer />
+        </Body>
+      </Wrapper>
+    </RecoilRoot>
   );
 }
 
@@ -40,8 +47,13 @@ const Header = styled.header`
 
 const Body = styled.div`
   display: flex;
+  flex-direction: column;
+  gap: 30px;
   > div {
     flex: 1;
     padding: 10px;
+  }
+  @media (min-width: 768px) {
+    flex-direction: row;
   }
 `;

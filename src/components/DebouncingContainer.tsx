@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import GreenButton from "../assets/green_button.png";
 import RedButton from "../assets/red_button.png";
 import LigthBurbOn from "../assets/lightburb_on.png";
 import LightBurbOff from "../assets/lightburb_off.png";
-import debounce from "../utils/debounce";
+import useDebounce from "../utils/useDebounce";
+import Description from "./Description";
+import { useRecoilState } from "recoil";
+import debounceLogState from "./../atom";
 
 function DebouncingContainer() {
   const [delayInputValue, setDelayInputValue] = useState(0);
   const [delay, setDelay] = useState(0);
   const [isLightBurbTurnedOn, setIsLightBurbTurnedOn] = useState(false);
+  const [logMessages, setLogMessages] = useRecoilState(debounceLogState);
 
   const turnOnBulb = () => {
     setIsLightBurbTurnedOn(true);
@@ -18,43 +22,34 @@ function DebouncingContainer() {
     }, 1000);
   };
 
+  const turnObBurbAfterDelay = useDebounce(turnOnBulb, delay, false);
+  const turnObBurbImmediately = useDebounce(turnOnBulb, delay, true);
+
   const handleClickSetDelay = () => {
     setDelay(delayInputValue);
     setDelayInputValue(0);
-    alert(`delay가 ${delay}로 설정되었습니다.`);
+    setLogMessage(`delay가 ${delayInputValue}로 설정되었습니다.`);
   };
 
   const handleClickGreenButton = () => {
-    debounce(turnOnBulb, delay, false)
-      .debounced()
-      .then((res) => console.log(res));
+    turnObBurbAfterDelay.debounced().then((res) => setLogMessage(`반짝`));
   };
 
   const handleClickRedButton = () => {
-    debounce(turnOnBulb, delay, true)
-      .debounced()
-      .then((res) => console.log(res));
+    turnObBurbImmediately.debounced().then((res) => setLogMessage(`반짝`));
+  };
+
+  const handleClickResetButton = () => {
+    turnObBurbAfterDelay.cancel();
+  };
+
+  const setLogMessage = (newLog: string) => {
+    setLogMessages((prev) => [...prev, newLog]);
   };
 
   return (
     <div>
-      <div>
-        <h3>동작 설명</h3>
-        <div>
-          <ButtonDescriptionContainer>
-            <img src={GreenButton} alt="초록색 버튼" />
-            <p>
-              초록 스위치를 클릭하면 설정한 시간이 지난 후 불이 켜집니다. 만약
-              설정한 시간이 지나기 전에 초록 스위치를 다시 클릭하면 다시 클릭한
-              시간을 기준으로 설정한 시간이 지난 후 불이 켜집니다.
-            </p>
-          </ButtonDescriptionContainer>
-          <ButtonDescriptionContainer>
-            <img src={RedButton} alt="빨간색 버튼" />
-            <p>빨간 스위치를 클릭하면 바로 불이 들어옵니다.</p>
-          </ButtonDescriptionContainer>
-        </div>
-      </div>
+      <Description />
       <TimerSettingContainer>
         <h3>설정</h3>
         <label htmlFor="timer">delay</label>
@@ -71,6 +66,11 @@ function DebouncingContainer() {
         <div>
           <p>Delay: {delay}</p>
         </div>
+        <LogContainer>
+          {logMessages.map((message, index) => (
+            <div key={index}>{message}</div>
+          ))}
+        </LogContainer>
         <div>
           <PushButton
             src={GreenButton}
@@ -87,23 +87,13 @@ function DebouncingContainer() {
           src={isLightBurbTurnedOn ? LigthBurbOn : LightBurbOff}
           alt="전구 아이콘"
         />
-        <Button>리셋</Button>
+        <Button onClick={handleClickResetButton}>리셋</Button>
       </div>
     </div>
   );
 }
 
 export default DebouncingContainer;
-
-const ButtonDescriptionContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  img {
-    width: 40px;
-    height: 40px;
-  }
-`;
 
 const TimerSettingContainer = styled.div``;
 
@@ -125,3 +115,11 @@ const LightBurbImg = styled.img`
 `;
 
 const Button = styled.button``;
+
+const LogContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+  background-color: gray;
+  overflow-y: auto;
+`;
