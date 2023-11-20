@@ -1,46 +1,57 @@
-# Getting Started with Create React App
+# Debouncing
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> debouncing을 적용한 예제를 담은 데모 사이트입니다.
+> [바로 가기](http://biblek-debouncing.netlify.app)
 
-## Available Scripts
+<h2>
+    1. 개발 환경
+</h2>
 
-In the project directory, you can run:
+#### Front-End
 
-### `npm start`
+- React
+- typescript
+- styled-components
+- react-code-blocks
+- recoil
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<h2 id="installation">
+    2. 설치 및 실행 방법
+</h2>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```javascript
+// install dependency
+$> npm install
 
-### `npm test`
+// run app
+$> npm start
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<h2>
+    3. useDebounce
+</h2>
 
-### `npm run build`
+#### PARAMETERS
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| PARAMETERS | type     | description                           |
+| ---------- | -------- | ------------------------------------- |
+| func       | Function | 디바운스를 적용할 함수                |
+| wait       | number   | 밀리초 단위의 지연 시간. 기본 값은 0. |
+| immediate  | boolean  | 즉시 실행 옵션. 기본값은 false.       |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### RETURN VALUES
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Property  | type                             | description                                         |
+| --------- | -------------------------------- | --------------------------------------------------- |
+| debounced | (...args: any[]) => Promise<any> | 디바운스 된 함수이며 실행 시 프로미스를 반환합니다. |
+| cancel    | () => void                       | 디바운싱을 취소하고 타이머를 삭제하는 함수입니다.   |
 
-### `npm run eject`
+<h2>
+    4. 데모사이트에서 적용한 예제
+</h2>
+버튼을 클릭하여 전구에 불을 켤 수 있습니다.
+모든 버튼은 useDebounce를 사용하여 동작합니다.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+useDebounce의 실행 현황 관찰을 위해 로그를 기록하였습니다.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+![데모사이트 미리보기](demoImage.png)
